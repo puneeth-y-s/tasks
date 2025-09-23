@@ -34,7 +34,6 @@ functions:
 custom:
   pythonRequirements:
     usePoetry: true
-    dockerizePip: true # Ensures packaging matches Lambda environment
     noDeploy:
     - boto3 # already on Lambda
     - botocore # already on Lambda
