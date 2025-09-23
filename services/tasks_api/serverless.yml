@@ -1,0 +1,42 @@
+# This config deploys a Python 3.9 Lambda (main.handle) 
+# behind API Gateway, 
+# with CORS enabled and Poetry-managed dependencies. 
+# It’s a generic API service (tasks-api) that captures 
+# all routes, supports multiple environments 
+# (dev, prod), and uses .env for config.
+service: tasks-api
+
+frameworkVersion: '3'
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: python3.11
+  region: ${opt:region, 'eu-west-1'}
+  stage: ${opt:stage, 'development'}
+  logRetentionInDays: 90
+  environment:
+    APP_ENVIRONMENT: ${self:provider.stage}
+
+functions:
+  API:
+    handler: main.handle
+    timeout: 10
+    memorySize: 512
+    events:
+    - http:
+        path: /{proxy+}
+        method: any
+        cors:
+          origin: ${env:ALLOWED_ORIGINS}
+          maxAge: 60
+
+custom:
+  pythonRequirements:
+    usePoetry: true
+    noDeploy:
+    - boto3 # already on Lambda
+    - botocore # already on Lambda
+
+plugins:
+- serverless-python-requirements
