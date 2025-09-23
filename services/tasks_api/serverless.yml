@@ -35,7 +35,6 @@ custom:
   pythonRequirements:
     usePoetry: true
     dockerizePip: true # Ensures packaging matches Lambda environment
-    pythonBin: /opt/hostedtoolcache/Python/3.11.13/x64/bin/python3
     noDeploy:
     - boto3 # already on Lambda
     - botocore # already on Lambda
