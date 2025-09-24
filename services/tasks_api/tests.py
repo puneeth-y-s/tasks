@@ -1,19 +1,20 @@
-import pytest
-import boto3
 import uuid
+
+import boto3
+import pytest
 from fastapi import status
+from moto import mock_aws
 from starlette.testclient import TestClient
 
 from main import app
-from moto import mock_aws
-
-from store import TaskStore
 from models import Task, TaskStatus
+from store import TaskStore
 
 
 @pytest.fixture
 def client():
     return TestClient(app)
+
 
 @pytest.fixture
 def dynamodb_table():
@@ -35,19 +36,13 @@ def dynamodb_table():
             BillingMode="PAY_PER_REQUEST",
             GlobalSecondaryIndexes=[
                 {
-                    'IndexName': 'GS1',
-                    'KeySchema': [
-                        {
-                            'AttributeName': 'GS1PK',
-                            'KeyType': 'HASH'
-                        },
-                        {
-                            'AttributeName': 'GS1SK',
-                            'KeyType': 'RANGE'
-                        },
+                    "IndexName": "GS1",
+                    "KeySchema": [
+                        {"AttributeName": "GS1PK", "KeyType": "HASH"},
+                        {"AttributeName": "GS1SK", "KeyType": "RANGE"},
                     ],
-                    'Projection': {
-                        'ProjectionType': 'ALL',
+                    "Projection": {
+                        "ProjectionType": "ALL",
                     },
                 },
             ],
@@ -65,6 +60,7 @@ def test_health_check(client):
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {"message": "OK"}
 
+
 def test_added_task_retrieved_by_id(dynamodb_table):
     repository = TaskStore(table_name=dynamodb_table)
     task = Task.create(uuid.uuid4(), "Clean your office", "john@doe.com")
@@ -72,20 +68,26 @@ def test_added_task_retrieved_by_id(dynamodb_table):
 
     assert repository.get_by_id(task_id=task.id, owner=task.owner) == task
 
+
 def test_open_tasks_listed(dynamodb_table):
     repository = TaskStore(table_name=dynamodb_table)
     open_task = Task.create(uuid.uuid4(), "Clean your office", "john@doe.com")
-    closed_task = Task(uuid.uuid4(), "Clean your office", TaskStatus.CLOSED, "john@doe.com")
+    closed_task = Task(
+        uuid.uuid4(), "Clean your office", TaskStatus.CLOSED, "john@doe.com"
+    )
 
     repository.add(open_task)
     repository.add(closed_task)
 
     assert repository.list_open(owner=open_task.owner) == [open_task]
 
+
 def test_closed_tasks_listed(dynamodb_table):
     repository = TaskStore(table_name=dynamodb_table)
     open_task = Task.create(uuid.uuid4(), "Clean your office", "john@doe.com")
-    closed_task = Task(uuid.uuid4(), "Clean your office", TaskStatus.CLOSED, "john@doe.com")
+    closed_task = Task(
+        uuid.uuid4(), "Clean your office", TaskStatus.CLOSED, "john@doe.com"
+    )
 
     repository.add(open_task)
     repository.add(closed_task)
