@@ -47,12 +47,12 @@ functions:
           origin: ${env:ALLOWED_ORIGINS}
           maxAge: 60
         authorizer:
-          name: TasksAPIAuthorizer
-          type: COGNITO_USER_POOLS
-          arn:
-            Fn::GetAtt
-            - CognitoUserPool
-            - Arn
+        name: TasksAPIAuthorizer
+        type: COGNITO_USER_POOLS
+        providerARNs:
+        - Fn::GetAtt:
+          - CognitoUserPool
+          - Arn
 
 custom:
   pythonRequirements:
