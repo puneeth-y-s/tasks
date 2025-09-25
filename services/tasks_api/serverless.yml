@@ -49,7 +49,10 @@ functions:
         authorizer:
           name: TasksAPIAuthorizer
           type: COGNITO_USER_POOLS
-          arn: Fn::GetAtt - CognitoUserPool - Arn
+          arn:
+            Fn::GetAtt
+            - CognitoUserPool
+            - Arn
 
 custom:
   pythonRequirements:
