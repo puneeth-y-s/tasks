@@ -4,7 +4,7 @@ Resources:
     Properties:
       UserPoolName: ${self:provider.stage}-tasks-api-pool
       AutoVerifiedAttributes:
-        - email
+      - email
 
   CognitoUserPoolClient:
     Type: AWS::Cognito::UserPoolClient
@@ -13,7 +13,7 @@ Resources:
       UserPoolId:
         Ref: CognitoUserPool
       ExplicitAuthFlows:
-        - ADMIN_NO_SRP_AUTH
+      - ADMIN_NO_SRP_AUTH
       GenerateSecret: false
 
 Outputs:
