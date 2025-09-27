@@ -7,7 +7,6 @@
 service: tasks-api
 
 frameworkVersion: '3'
-# useDotenv: true
 
 provider:
   name: aws
