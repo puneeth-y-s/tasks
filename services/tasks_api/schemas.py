@@ -17,10 +17,12 @@ class APITask(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+
 class APITaskList(BaseModel):
     results: list[APITask]
 
     model_config = ConfigDict(from_attributes=True)
+
 
 class CloseTask(BaseModel):
     id: UUID
