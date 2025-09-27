@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: '16.x'
       - name: Install Serverless Framework
-        run: npm install -g serverless
+        run: npm install -g serverless@3
       - name: Install NPM dependencies
         run: npm install
       - name: Destroy
@@ -35,7 +35,7 @@ jobs:
         with:
           node-version: '16.x'
       - name: Install Serverless Framework
-        run: npm install -g serverless
+        run: npm install -g serverless@3
       - name: Install NPM dependencies
         run: npm install
       - name: Destroy
