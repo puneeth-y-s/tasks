@@ -45,7 +45,7 @@ functions:
         path: /{proxy+}
         method: any
         cors:
-          origin: ${env:ALLOWED_ORIGINS}
+          origin: ${env:ALLOWED_ORIGINS, "*"}
           maxAge: 60
         authorizer:
           name: TasksAPIAuthorizer
